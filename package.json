@@ -1,0 +1,12 @@
+{
+  "name": "jsnad-preparation",
+  "version": "1.0.0",
+  "description": "My JSNAD preparation",
+  "main": "index.js",
+  "repository": "https://github.com/alelapi/jsnad-preparation.git",
+  "author": "Alessio Lapi <alessio.lapi@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "docsify serve docs"
+  }
+}
