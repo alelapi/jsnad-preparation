@@ -15,3 +15,5 @@
   - [Unit testing](certification/unit-testing/README.md)
 - Core
   - [Event Loop](core/event-loop/README.md)
+  - [setImmediate() vs setTimeout()](core/setimmediate-settimeout/README.md)
+  - [process.nextTick()](core/nexttick/README.md)
