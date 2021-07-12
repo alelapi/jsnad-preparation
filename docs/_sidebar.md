@@ -1,5 +1,5 @@
 - [Home](/)
-- Certification
+- Certification JSNAD
   - [Buffer and Streams](certification/buffer-stream/README.md)
   - [Control flow](certification/control-flow/README.md)
   - [Child Processes](certification/child-processes/README.md)
@@ -13,10 +13,13 @@
   - [Process/Operating System](certification/process-operating-system/README.md)
   - [Package.json](certification/packagejson/README.md)
   - [Unit testing](certification/unit-testing/README.md)
-- Core
+- NODE.js - Fundamentals
   - [Event Loop](core/event-loop/README.md)
   - [setImmediate() vs setTimeout()](core/setimmediate-settimeout/README.md)
   - [process.nextTick()](core/nexttick/README.md)
 - Javascript
   - [for await...of](javascript/for-await-of/README.md)
   - [Iterators and Iteration](javascript/iterators/README.md)
+  - [Clojures](javascript/clojures/README.md)
+  - [IIFE](javascript/iife/README.md)
+  - [Module Design Pattern](javascript/module-pattern/README.md)
