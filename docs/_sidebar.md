@@ -23,3 +23,4 @@
   - [Clojures](javascript/clojures/README.md)
   - [IIFE](javascript/iife/README.md)
   - [Module Design Pattern](javascript/module-pattern/README.md)
+  - [Generator functions](javascript/generators/README.md)
