@@ -24,3 +24,4 @@
   - [IIFE](javascript/iife/README.md)
   - [Module Design Pattern](javascript/module-pattern/README.md)
   - [Generator functions](javascript/generators/README.md)
+  - [Callback Hell](javascript/callback-hell/README.md)
