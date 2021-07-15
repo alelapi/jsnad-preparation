@@ -25,3 +25,4 @@
   - [Module Design Pattern](javascript/module-pattern/README.md)
   - [Generator functions](javascript/generators/README.md)
   - [Callback Hell](javascript/callback-hell/README.md)
+  - [Inversion of control](javascript/inversion-control/README.md)
