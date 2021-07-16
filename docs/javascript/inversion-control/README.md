@@ -4,7 +4,7 @@ In the context of callbacks, inversion of control is the notion of having code u
 
 When you pass a callback to a third party vendor function you can't be sure that your callback will be invoked. Actually you are giving the control of the flow to external library, that's what is called Inversion of Control.
 
-To fix it you can use Promise.
+To fix it you can use Promise. Promise are not responsible to execute your callback, they just report a state (pending/resolve/reject) then you will responsible of executing callbacks.
 
 To understand if a callback is really invoked, one solution could be wrap into a setTimeout.
 
