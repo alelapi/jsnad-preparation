@@ -179,3 +179,116 @@ rs.pipe(uppercase).pipe(newFile);
 - `callback(error, transformedChunk)` = callback function called after transformation.
 
 ### ES6 syntax
+
+```
+const fs = require("fs");
+const { Transform } = require("stream");
+
+const rs = fs.createReadStream("./file.txt");
+const newFile = fs.createWriteStream("./newFile.txt");
+
+class Uppercase extends Transform {
+  constructor() {
+    super();
+  }
+
+  _transform(chunk, encoding, callback) {
+    this.push(chunk.toString().toUpperCase());
+    callback();
+  }
+}
+
+rs.pipe(new Uppercase()).pipe(newFile);
+```
+
+## Create object mode transform streams
+
+By default streams operate with String, Buffer or Uint8Array, but it's also possible to work in object mode.
+The main difference is that the value of `highWaterMark` refers to number of objects rather than bytes. To use object mode you need to set in `options`: `{ objectMode: true }`.
+
+```
+const { Transform } = require("stream");
+const { stringify } = require("ndjson");
+
+const Name = Transform({
+  objectMode: true,
+  transform: ({ forename, surname }, encoding, callback) => {
+    callback(null, { name: forename + " " + surname });
+  },
+});
+
+Name.pipe(stringify()).pipe(process.stdout);
+
+Name.write({ forename: "John", surname: "Doe" });
+```
+
+In this example, we read an object as input, transform, stringify and finally print to stdout.
+You can independently specify for read and write streams if they are in object mode and their waterMark (`readableObjectMode/writeableObjectMode`, `readableHighWaterMark/writeableHighWaterMark`).
+
+## Building streams pipeline
+
+You can use method `pipeline()` to chain multiple streams together, allowing also to handle errors.
+
+```
+const fs = require("fs");
+const { pipeline, Transform } = require("stream");
+
+const uppercase = new Transform({
+  transform(chunk, encoding, callback) {
+    // Data processing
+    callback(null, chunk.toString().toUpperCase());
+  },
+});
+
+pipeline(
+  fs.createReadStream("./file.txt"),
+  uppercase,
+  fs.createWriteStream("./newFile.txt"),
+  (err) => {
+    if (err) {
+      console.error("Pipeline failed.", err);
+    } else {
+      console.log("Pipeline succeeded.");
+    }
+  }
+);
+```
+
+Arguments:
+
+- `source`: source stream
+- `...transforms`: any number of transform streams
+- `destination`: destination stream
+- `callback`: function called after the pipeline is completed
+
+### Promisify pipelines
+
+You can use pipelines in Promise form using `util.promisify()` that will convert to a Promise a callback-style function.
+
+```
+const fs = require("fs");
+const stream = require("stream");
+const util = require("util");
+
+const pipeline = util.promisify(stream.pipeline);
+
+const uppercase = new stream.Transform({
+  transform(chunk, encoding, callback) {
+    // Data processing
+    callback(null, chunk.toString().toUpperCase());
+  },
+});
+
+async function run() {
+  await pipeline(
+    fs.createReadStream("./file.txt"),
+    uppercase,
+    fs.createWriteStream("./newFile.txt")
+  );
+  console.log("Pipeline succeeded.");
+}
+
+run().catch((err) => {
+  console.error("Pipeline failed.", err);
+});
+```
