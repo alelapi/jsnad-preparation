@@ -17,6 +17,7 @@
   - [Event Loop](core/event-loop/README.md)
   - [setImmediate() vs setTimeout()](core/setimmediate-settimeout/README.md)
   - [process.nextTick()](core/nexttick/README.md)
+  - [Semantic versioning rules](core/semantic-version/README.md)
 - Javascript
   - [for await...of](javascript/for-await-of/README.md)
   - [Iterators and Iteration](javascript/iterators/README.md)
