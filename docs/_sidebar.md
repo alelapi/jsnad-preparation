@@ -27,3 +27,4 @@
   - [Generator functions](javascript/generators/README.md)
   - [Callback Hell](javascript/callback-hell/README.md)
   - [Inversion of control](javascript/inversion-control/README.md)
+  - [Export](javascript/export/README.md)

@@ -96,3 +96,36 @@ To see all your config:
 `npm config list`
 
 ## Using ECMAScript modules
+
+ECMAScript is the language specification created to standardize JavaScript.
+ECMAScript modules are official format to package JavaScript code for reuse.
+Node.Js support them and provide a limited interoperability with CommonJs format, the original and default mode for Node.Js, but they are still currently experimental.
+Support is enabled from version `13.2.0`.
+
+```
+import express from "express";
+import { name } from "./get-name/index.mjs"; // Our custom module that export variable `name`
+
+const PORT = 3000;
+const app = express();
+
+app.get("/", (req, res) => res.send(`Hello from ${name}!`));
+
+app.listen(PORT, () => {
+  console.log("Express server started on port", PORT);
+});
+```
+
+`.mjs` is the extensions for ECMAScript module files.
+`.cjs` is the extensions for CommonJs module files.
+
+You can use ECMAScript/CommonJs module globally with extension .js setting in package.json:
+
+```
+{
+    type: "module" //for ECMAScript
+    type: "commonjs" //for CommonJs
+}
+```
+
+`export` syntax can be used to export object, functions, and values.
