@@ -64,3 +64,47 @@ const fastify = require('fastify')({
 
 Morgan is an HTTP request logger middleware for Node.js, only for HTTP request and not for general purposes.
 It's generally used with express. Using `express-generator` will create a skeleton that include already Morgan.
+
+```
+var logger = require('morgan');
+app.use(logger('dev'));
+```
+
+with the parameter we can set the logging format.
+
+## Logging with Winston
+
+Winston expose an interface that is also similar to log4j interface. The difference between Pino and Winston is that Winston provide a large number of configuration options, and it includes log transformation and log rotations.
+
+```
+var winston = require('winston');
+var expressWinston = require('express-winston'); //winston middleware
+app.use(expressWinston.logger({
+    transports: [
+        new winston.transports.Console({
+            json: true //expose log in json format
+        })
+    ]
+}));
+```
+
+## Enabling debug logs
+
+`debug` is a small library utility used by Express,Koa and Mocha.
+To enable, start the server with the following command:
+
+`DEBUG=* node server.js`
+
+you can also filter by log type specifing the value to DEBUG=.
+For every request you can see in console the complete list of sub actions processed.
+
+DEBUG is an environment variable that will be used by the internal module `debug` for print instructions.
+You can add also custom debug message like so:
+
+```
+const debug = require('debug')('my-server'); //message will be prepended with 'my-server'
+...
+
+debug('My message');
+
+```
