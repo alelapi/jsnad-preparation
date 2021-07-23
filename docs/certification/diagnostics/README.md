@@ -108,3 +108,23 @@ const debug = require('debug')('my-server'); //message will be prepended with 'm
 debug('My message');
 
 ```
+
+## Enabling Node.js core debug logs
+
+You can enable debug on internal Node.js setting the environment variable NODE_DEBUG to an internal flag such as :
+
+- `timer` = timer core debug logs
+- `http` = log for internal http module
+
+and many other internal Node modules (`https`, `http2`,`cluster`,`module`,`worker`,`tls`...)
+You can set multiple flags separating by commas.
+
+## Increasing stack trace size
+
+By default stack trace size it's limited to 10 lines. You can increase the size by setting using the flag:
+`node --stack-trace-limit=20`
+It's also possible to set by code with:
+`Error.stackTraceLimit=20`
+`Error.stackTraceLimit=Infinity` for no limit to stack trace.
+
+### Asynchronous stack trace
