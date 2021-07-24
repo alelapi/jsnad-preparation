@@ -127,4 +127,24 @@ It's also possible to set by code with:
 `Error.stackTraceLimit=20`
 `Error.stackTraceLimit=Infinity` for no limit to stack trace.
 
-### Asynchronous stack trace
+Starting from Node 12, you can log also asynchronous stack trace.
+
+## Creating diagnostic reports
+
+You can create diagnostic reports containg data relative to specific event, that can help you diagnose problems in applications.
+To enable it, add use this command to launch node:
+`node --report-uncaught-exception server.js`
+
+when an uncaught exception occur, it will be generated a json file in `report` folder with error details.
+All flag options:
+
+- `--report-uncaught-exception` = it is triggered a crash when a uncaught exception occur.
+- `--report-on-signal` = when receiving a specific signal.
+- `--report-on-fatalerror` = on a fatal error, such as an out of memory.
+
+It is also possible to generate report from within your application using:
+`process.report.writeReport()`
+
+You can setup folder and report name with:
+`process.report.directory (--report-directory)`
+`process.report.filename (--report-filename)`
