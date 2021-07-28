@@ -213,3 +213,57 @@ fs.watch(file, (eventType, filename) => {
 ```
 
 ## Creating TCP server and client communication
+
+TCP = Transmission Control Protocol
+
+Socket TCP - Node provide a core module `net`
+Client:
+
+```
+const net = require("net");
+
+const HOSTNAME = "localhost";
+const PORT = 3000;
+
+const socket = net.connect(PORT, HOSTNAME); // connect to server
+
+socket.write("World"); // send message to server
+
+socket.on("data", (data) => { // on server data received
+  console.log(data.toString());
+});
+```
+
+Server:
+
+```
+const net = require("net");
+
+const HOSTNAME = "localhost";
+const PORT = 3000;
+
+net
+  .createServer((socket) => { // create server
+    console.log("Client connected.");
+
+    socket.on("data", (name) => { // on client data received
+      socket.write(`Hello ${name}!`); // send message to client
+    });
+  })
+  .listen(PORT, HOSTNAME);
+```
+
+There are many other events we can listen, like: `close`, `connect`, `error`, `ready`, `drain` (write buffer is empty), `end`.
+
+UDP = User Datagram Protocol
+UDP is a protocol faster than TCP that not require connection with server, but delivery is not guaranteed.
+It's used in application where speed is more important like video calls, gaming, streaming.
+
+Socket UDP - Node provide a core module `dgram`
+
+```
+const dgram = require('dgram');
+const socket = dgram.createSocket('udp6');
+socket.bind(PORT);
+
+```
