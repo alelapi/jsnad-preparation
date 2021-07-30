@@ -1,6 +1,7 @@
 # Error Handling
 
 An exception is created using `throw` an Error object.
+You can technically throw things that are not Errors, but this should be avoided.
 
 ```
 throw new Error('my error');
@@ -136,3 +137,55 @@ async function someFunction() {
   }
 }
 ```
+
+NB: You can't handle asynchronous error invoking the callback function and passing the error.
+
+```
+const func = () => {
+  return new Promise((resolve, reject) => {
+    setImmediate(() => {
+      throw new Error('foo');
+    });
+  });
+};
+
+
+const main = async () => {
+  try {
+    await func();
+  } catch (ex) {
+    console.log('will not execute');
+  }
+};
+
+main();
+```
+
+This will generate an unhandle error. In this case you have to handle with the Promise catch.
+
+```
+const main = () => {
+  func().catch((ex) => console.log('will execute'))
+};
+
+```
+
+## Operational Errors and Programmer errors
+
+Operational errors = run-time problems experienced by correctly-written programs.
+Programmer errors = bugs in program.
+
+### Handling operational errors
+
+There isn't a unique way to manage these kind of errors, there are unhandle errors and you need to find the cause and handle it.
+
+You might do:
+
+- Deal with the failure directly, recover in case of errors
+- Propagate the failure to your client
+- Retry the operation
+- Just log and skip
+
+### Handling programmer errors
+
+The best way to recover from programmer errors is to crash immediately. You should run your programs using a restarter that will automatically restart the program in the event of a crash.
