@@ -24,8 +24,6 @@ beforeExit = event emitted when Node.js empties the event loop and has no additi
 exit = event emitted when any additional work scheduled for the event loop will be abandoned.
 uncaughtException = method used for exceptions that were not accounted for within the application and may cause the process to crash
 
-TODO: //** difference between once and on **//
-
 ### some process property
 
 stdin = readable stream which means it behaves as an input.
