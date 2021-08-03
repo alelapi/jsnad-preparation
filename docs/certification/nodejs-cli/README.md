@@ -8,6 +8,8 @@ Node.js comes with a variety of CLI options. These options expose built-in debug
 - If an option that takes a single value is passed more than once, then the last passed value is used
 - Options from the command line take precedence over options passed through the NODE_OPTIONS environment variable
 
+## Options
+
 Some of options available:
 
 `--enable-source-maps` = Enable Source Map v3 support for stack traces.
@@ -46,3 +48,21 @@ By default, when Node.js loads a module from a path that is symbolically linked 
 - none: Silence all warnings.
 
 ## Environment variables
+
+Some of envs available:
+
+`NODE_DEBUG=module[,…]` = ','-separated list of core modules that should print debug information.
+`NODE_ICU_DATA=file` = Data path for ICU (Intl object) data. Will extend linked-in data when compiled with small-icu support.
+`NODE_NO_WARNINGS=1` = When set to 1, process warnings are silenced.
+`NODE_OPTIONS=options...` = A space-separated list of command-line options. `options...` are interpreted before command-line options, so command-line options will override or compound after anything in `options...`. Node.js will exit with an error if an option that is not allowed in the environment is used, such as -p or a script file.
+`NODE_PATH=path[:…]` = ':'-separated list of directories prefixed to the module search path. On Windows, this is a ';'-separated list instead.
+`NODE_TLS_REJECT_UNAUTHORIZED=value` = If value equals '0', certificate validation is disabled for TLS connections. This makes TLS, and HTTPS by extension, insecure. The use of this environment variable is strongly discouraged.
+`SSL_CERT_FILE=file` = If --use-openssl-ca is enabled, this overrides and sets OpenSSL's file containing trusted certificates.
+Be aware that unless the child environment is explicitly set, this environment variable will be inherited by any child processes, and if they use OpenSSL, it may cause them to trust the same CAs as node.
+
+## Useful V8 options
+
+`--max-old-space-size=SIZE (in megabytes)` = Sets the max memory size of V8's old memory section. As memory consumption approaches the limit, V8 will spend more time on garbage collection in an effort to free unused memory.
+On a machine with 2 GB of memory, consider setting this to 1536 (1.5 GB) to leave some memory for other uses and avoid swapping.
+
+`node --max-old-space-size=1536 index.js`
