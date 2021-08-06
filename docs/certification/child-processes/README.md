@@ -86,7 +86,7 @@ wc.stdout.on("data", data => {
 
 ## exec()
 
-exec function is slightly less efficient than spawn because create a shell, so you use all shell syntax.
+exec function is slightly less efficient than spawn because create a shell, so you can use all shell syntax.
 Also it buffers the command's generated output and passes the whole output value to a callback function instead of using streams.
 
 Previous example implemented with exec:
@@ -123,3 +123,41 @@ child.unref(); //using unref, parent process can exit indipendently
 And with this code we still get the advantage of the streaming of data that the spawn function gives us.
 
 ## execFile()
+
+Execute a file without using a shell. It behaves exactly like the exec function, but does not use a shell, which makes it a bit more efficient.
+
+## \*Sync Functions
+
+The functions `spawn`, `exec`, and `execFile` from the child_process module also have synchronous blocking versions that will wait until the child process exits. Those synchronous versions are potentially useful when trying to simplify scripting tasks or any startup processing tasks, but they should be avoided otherwise.
+
+## fork()
+
+The fork function is a variation of the `spawn` function for spawning node processes. The biggest difference between spawn and fork is that a communication channel is established to the child process when using fork, so we can use the send function on the forked process along with the global process object itself to exchange messages between the parent and forked processes.
+
+Parent process
+
+```
+const { fork } = require("child_process");
+
+const forked = fork("child.js"); // execute file with 'node' command
+
+forked.on("message", msg => {
+  console.log("Message from child", msg);
+});
+
+forked.send({ hello: "world" });
+```
+
+Child process
+
+```
+process.on("message", msg => {
+  console.log("Message from parent:", msg);
+});
+
+let counter = 0;
+
+setInterval(() => {
+  process.send({ counter: counter++ });
+}, 1000);
+```
