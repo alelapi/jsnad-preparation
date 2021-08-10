@@ -8,7 +8,6 @@
   - [Node.js CLI](certification/nodejs-cli/README.md)
   - [Events](certification/events/README.md)
   - [File System](certification/file-system/README.md)
-  - [JavaScripts Prerequisites](certification/javascripts-prerequisites/README.md)
   - [Module system](certification/module-system/README.md)
   - [Process/Operating System](certification/process-operating-system/README.md)
   - [Package.json](certification/packagejson/README.md)
@@ -19,6 +18,7 @@
   - [process.nextTick()](core/nexttick/README.md)
   - [Semantic versioning rules](core/semantic-version/README.md)
   - [Writing function conventions](core/writing-functions/README.md)
+  - [Performance](core/performance/README.md)
 - Javascript
   - [for await...of](javascript/for-await-of/README.md)
   - [Iterators and Iteration](javascript/iterators/README.md)

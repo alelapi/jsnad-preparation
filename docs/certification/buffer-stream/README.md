@@ -1,5 +1,16 @@
 # Buffer and Streams
 
+Buffers are an abstraction that allows us to deal with raw binary data in Node.js. They are particularly relevant when we are dealing with files and networks or I/O in general.
+
+```
+const bufferFromString = Buffer.from('Ciao human')
+const bufferFromByteArray = Buffer.from([67, 105, 97, 111, 32, 104, 117, 109, 97, 110])
+const bufferFromHex = Buffer.from('4369616f2068756d616e', 'hex')
+const bufferFromBase64 = Buffer.from('Q2lhbyBodW1hbg==', 'base64')
+```
+
+You can create buffer from string, bytes array, hexadecimal string, base64 string.
+
 Streams is a key feature of NodeJS. Streams provide a mechanism to sequentially read input and write output in chunks.
 They are often used in big data applications or media streaming services, where the data is too large to consume at once.
 
@@ -41,6 +52,8 @@ rs.on("end", () => {
   console.log("No more data.");
 });
 ```
+
+Every chunk is a `Buffer` instance.
 
 `createReadStream` and `createWriteStream` accept two parameters: `path` (of file) and `options`.
 Check documentation for options availables (https://nodejs.org/api/fs.html#fs_fs_createreadstream_path_options).

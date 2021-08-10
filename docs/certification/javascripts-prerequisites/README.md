@@ -1,3 +1,0 @@
-# JavaScripts Prerequisites
-
-JavaScripts Prerequisites
