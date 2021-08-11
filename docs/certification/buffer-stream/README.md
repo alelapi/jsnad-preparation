@@ -1,6 +1,8 @@
 # Buffer and Streams
 
-Buffers are an abstraction that allows us to deal with raw binary data in Node.js. They are particularly relevant when we are dealing with files and networks or I/O in general.
+`Buffers` are an abstraction that allows us to deal with raw binary data in Node.js. They are particularly relevant when we are dealing with files and networks or I/O in general.
+
+You can create buffer from string, bytes array, hexadecimal string, base64 string.
 
 ```
 const bufferFromString = Buffer.from('Ciao human')
@@ -9,9 +11,16 @@ const bufferFromHex = Buffer.from('4369616f2068756d616e', 'hex')
 const bufferFromBase64 = Buffer.from('Q2lhbyBodW1hbg==', 'base64')
 ```
 
-You can create buffer from string, bytes array, hexadecimal string, base64 string.
+If you want to inspect the content of a Buffer instance you can do that with the `.toString(encoding)` method, which accepts different types of encoding such as `base64`, `hex` or `utf8` (default value).
 
-Streams is a key feature of NodeJS. Streams provide a mechanism to sequentially read input and write output in chunks.
+```
+bufferFromString.toString('utf-8') // Ciao human ('utf-8' is the default)
+bufferFromString.toString('hex') // 4369616f2068756d616e
+bufferFromString.toString('base64') // Q2lhbyBodW1hbg==
+
+```
+
+`Streams` is a key feature of NodeJS. Streams provide a mechanism to sequentially read input and write output in chunks.
 They are often used in big data applications or media streaming services, where the data is too large to consume at once.
 
 There are four types of streams:
@@ -64,7 +73,74 @@ Write Streams: `close`, `drain`, `finish`, `error`, `pipe`, `unpipe`.
 
 ## Readable Streams
 
-Readable Streams are asynchronous iterables, so you can iterate using `for await...of`.
+A readable stream represents a source from which data is consumed.
+
+Some common examples of Readable streams:
+
+- Read a file from the filesystem: fs.createReadStream
+- Command line standard input: process.stdin
+- An HTTP response (received by a client)
+- An HTTP request (received by a server)
+- AWS S3 GetObject (data field)
+
+A stream can be in **flowing mode** (data chunks read automatically) or **paused mode** (need to call `stream.read()`).
+
+### Flowing streams:
+
+Data is read from source automatically and chunks are emitted as soon as they are available. Every single time there's some data available a data event is emitted. When no more data is available, the end event is emitted.
+
+```
+const fs = require("fs");
+
+const rs = fs.createReadStream("./file.txt");
+
+rs.on("data", (data) => {
+  console.log("Read chunk:", data);
+});
+
+rs.on("end", () => {
+  console.log("No more data.");
+});
+```
+
+### Paused streams:
+
+The stream emits a `readable` event to signal that new data is available and the consumer have to call `read()` to read the data. If there's no more data in the internal buffer a call to read() will return null. Also in this mode, once all the data has been read, `end` is emitted.
+
+```
+const fs = require("fs");
+
+const rs = fs.createReadStream("./file.txt");
+
+rs.on("readable", () => {
+  // Read data
+  let data = rs.read();
+  while (data !== null) {
+    console.log("Read chunk:", data);
+    data = rs.read();
+  }
+});
+
+rs.on("end", () => {
+  console.log("No more data.");
+});
+```
+
+Paused mode is the default mode for a readable stream. It will switch to flowing mode in the following cases:
+
+- when a `data` event is registred
+- when the `pipe()` method is called
+- when the `resume()` method is called
+
+If the stream is in flowing mode, it will switch to paused mode in the following cases:
+
+- when the `pause()` method is called and there is no pipe destinations
+- when the `unpipe()` method is called on all pipe destinations
+- when a `readable` event is registred
+
+### Asynchronous iterables
+
+Readable Streams are also asynchronous iterables, so you can iterate using `for await...of`.
 
 ```
 const fs = require("fs");
@@ -101,42 +177,54 @@ readable.on("data", (chunk) => {
 });
 ```
 
-## Interacting with paused streams
+## Writable streams
 
-A stream can be in flowing mode (data chunks read automatically) or paused mode (need to call `stream.read()`).
+A Writable stream is an abstraction that allows you to write data over a destination.
 
-Paused streams:
+Some examples of Writable streams:
+
+- Writing to a file with fs.createWriteStream()
+- Command line standard output and standard error (process.stdout, process.stderr)
+- An HTTP request (when sent by a client)
+- An HTTP response (when sent by a server)
+- AWS S3 PutObject (body parameter)
 
 ```
-const fs = require("fs");
+import { request } from 'http'
 
-const rs = fs.createReadStream("./file.txt");
+/*request(..) return a Writeable stream*/
+const req = request(
+  options, //url, method, path...
+  (resp) => {} //callback
+)
 
-rs.on("readable", () => {
-  // Read data
-  let data = rs.read();
-  while (data !== null) {
-    console.log("Read chunk:", data);
-    data = rs.read();
-  }
-});
+req.on('finish', () => console.log('request sent')) //request fully sent
+req.on('close', () => console.log('Connection closed')) //connection closed
+req.on('error', err => console.error(`Request failed: ${err}`)) //error
 
-rs.on("end", () => {
-  console.log("No more data.");
-});
+req.write('writing some content...\n') //send data to server
+req.end('last write & close the stream') //end of sending data
 ```
 
-Paused mode is the default mode for a readable stream. It will switch to flowing mode in the following cases:
+### Backpressure
 
-- when a `data` event is registred
-- when the `pipe()` method is called
-- when the `resume()` method is called
+When you read from a stream and write to another one, if the readable stream is much more faster than the writable stream, it's possible that the writable stream will keep accumulating data to the point where it will crash. This problem is called **backpressure**.
 
-If the stream is in flowing mode, it will switch to paused mode in the following cases:
+You can manage this problem using the return value of `write()`, that is a boolean value indicating whether the destination is safe to continue accepting data. If the writable stream is not ready, it will emit a `drain` event when will be ready again.
 
-- when the `pause()` method is called and there is no pipe destinations
-- when the `unpipe()` method is called on all pipe destinations
-- when a `readable` event is registred
+```
+function backpressureAwareCopy(srcStream, destStream) {
+  srcStream.on('data', (chunk) => {
+    const canContinue = destStream.write(chunk)
+    if (!canContinue) {
+      // if we are overflowing the destination, we stop reading
+      srcStream.pause()
+      /*once all the buffered data is flushed, we resume reading from source. We use once because we want to listen to drain event only one time when      the stream is overflowing*/
+      destStream.once('drain', () => srcStream.resume())
+    }
+  })
+}
+```
 
 ## Piping streams
 
