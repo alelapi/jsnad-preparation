@@ -472,8 +472,8 @@ export default class DateStream extends Readable {
 - Extend `Transform` class
 - Implements `_transform()` method. It accepts the following parameters:
   - `chunk`: the current chunk of data to transform
-  - `enc`: a string that represents the current encoding of the data
-  - `cb`: a callback to invoke when the transformation is done. This allows you to have asynchronous transformations.
+  - `encoding`: a string that represents the current encoding of the data
+  - `callback`: a callback to invoke when the transformation is done. This allows you to have asynchronous transformations.
 
 ```
 import { Transform } from 'readable-stream'
@@ -485,3 +485,15 @@ export default class Uppercasify extends Transform {
   }
 }
 ```
+
+Transform streams have also a `_flush()` method alled every time the source stream is finished and before the Transform stream gets closed.
+
+Like for readable streams, you can do that instantiating a Transform stream and override the `transform()` method.
+
+### Custom Writable streams
+
+- Extend `Writable` class
+- Implements `_write()` method. It accepts the following parameters:
+  - `chunk`: the current chunk of data to write
+  - `encoding`: a string that represents the current encoding of the data
+  - `callback`: a callback to invoke when the write is done
