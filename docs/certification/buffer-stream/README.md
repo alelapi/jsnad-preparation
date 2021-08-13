@@ -226,29 +226,23 @@ function backpressureAwareCopy(srcStream, destStream) {
 }
 ```
 
-## Piping streams
-
-Piping stands for one-way redirection between streams.
-
-```
-const fs = require("fs");
-const rs = fs.createReadStream("file.txt");
-rs.pipe(process.stdout);
-```
-
-This simple code create a readable stream and pipe the output to `process.stdout`, `pipe()` will write the incoming data to destionation stream.
-Under the cover, pipe also manages any possible problem of backpressure, that is when reading stream is much faster than write stream; this could produce a large amount of memory kept in before write to destination stream.
-
-By default, when the stream reach the end will emit an `end` event that we will be catched by `stream.end()` on destination stream, that will close the stream. You can avoid this behaviour by setting an option.
-
 ## Transforming data with transform streams
 
-Transform streams allow to consume input data, process that data and then output that processed data.
-They are duplex streams, which means they implements both readable and writeable interfaces.
+A Duplex stream is essentially a stream that is both Readable and Writable. It is an ideal abstraction to represent readable and writable pipes like TCP connections.
+
+Transform streams are a special class of Duplex streams that allow to consume input data, process that data and then output that processed data.
 With transform stream you can:
 
 - manipulate data functionally and asynchronously
 - pipe many transformations to data
+
+Some example are:
+
+- Compression / Decompression
+- Encryption / Decryption
+- Data filtering and aggregation
+- Data enrichment
+- Media transcoding
 
 ```
 const fs = require("fs");
@@ -278,6 +272,30 @@ rs.pipe(uppercase).pipe(newFile);
 - `chunk` = the data to be transformed.
 - `encoding` = if a string, encoding will be of the type specified. If it's a buffer the type will be a buffer.
 - `callback(error, transformedChunk)` = callback function called after transformation.
+
+## Piping streams
+
+Piping stands for one-way redirection between streams.
+
+```
+const fs = require("fs");
+const rs = fs.createReadStream("file.txt");
+rs.pipe(process.stdout);
+```
+
+This simple code create a readable stream and pipe the output to `process.stdout`, `pipe()` will write the incoming data to destionation stream.
+Under the cover, pipe also manages any possible problem of backpressure, that is when reading stream is much faster than write stream; this could produce a large amount of memory kept in before write to destination stream.
+
+By default, when the stream reach the end will emit an `end` event that we will be catched by `stream.end()` on destination stream, that will close the stream. You can avoid this behaviour by setting an option.
+
+We can insert a Transform stream between our Readable and Writable stream to transform data before write. We call our streams readable, one or more transform streams and writable:
+
+```
+readable
+  .pipe(transform1)
+  .pipe(transform2)
+  .pipe(writable)
+```
 
 ### ES6 syntax
 
@@ -328,7 +346,8 @@ You can independently specify for read and write streams if they are in object m
 
 ## Building streams pipeline
 
-You can use method `pipeline()` to chain multiple streams together, allowing also to handle errors.
+Using `pipe` you have to handle error in every single step. You can use method `pipeline()` to chain multiple streams together, allowing also to handle errors.
+`stream.pipeline(...streams, callback)`
 
 ```
 const fs = require("fs");
@@ -392,4 +411,77 @@ async function run() {
 run().catch((err) => {
   console.error("Pipeline failed.", err);
 });
+```
+
+### Composability and pumpify
+
+You can generally see the source Readable stream as the input, the chain of Transform streams as business logic and the Writable stream as an output.
+You can expose all the business logic as a separate module independent from the Readable source and the Writable destination using the module `pumpify`.
+
+```
+import pumpify from 'pumpify'
+
+// ... create all the stream instances here
+
+const myTransformPipeline = pumpify(
+  decompressStream,
+  decryptStream,
+  convertStream,
+  encryptStream,
+  compressStream
+)
+
+export default myTransformPipeline
+```
+
+If one of the streams closes or generates an error, all the streams in the pipeline will be destroyed.
+
+## Custom streams
+
+`readable-stream` is a very useful module from NPM. It allows to:
+
+- use the latest stream features regardless of what version of Node.js is running your code
+- make streams compatible with the browser
+
+### Custom readable streams
+
+- Extend `Readable` class
+- Implements `_read()` method. Inside this call `this.push(data)` to emit data event. `this.push(null)` will emit end event.
+
+If your custom stream does not differ so much from the standard, you can do that instantiating a Readable stream and passing to it the `read()` method.
+
+Yoou can create streams that emit objects instead of strings or buffers, setting the option `objectMode: true`:
+
+```
+import { Readable } from 'readable-stream'
+
+export default class DateStream extends Readable {
+  constructor (options = {}) {
+    options.objectMode = true // forces object mode
+    super(options)
+  }
+
+  _read () {
+    this.push(new Date())
+  }
+}
+```
+
+### Custom transform streams
+
+- Extend `Transform` class
+- Implements `_transform()` method. It accepts the following parameters:
+  - `chunk`: the current chunk of data to transform
+  - `enc`: a string that represents the current encoding of the data
+  - `cb`: a callback to invoke when the transformation is done. This allows you to have asynchronous transformations.
+
+```
+import { Transform } from 'readable-stream'
+
+export default class Uppercasify extends Transform {
+  _transform (chunk, encoding, done) {
+    this.push(chunk.toString().toUpperCase())
+    done()
+  }
+}
 ```
