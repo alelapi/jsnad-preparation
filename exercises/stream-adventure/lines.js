@@ -1,4 +1,4 @@
-const split2 = require('split2')  
+const split2 = require('split2')
 const through2 = require('through2')
 let i = 0;
 process.stdin
