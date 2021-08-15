@@ -1,0 +1,10 @@
+{
+  "name": "learnyounode",
+  "version": "1.0.0",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^3.2.1"
+  }
+}
