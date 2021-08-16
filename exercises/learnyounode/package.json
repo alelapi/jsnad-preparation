@@ -5,6 +5,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "async": "^3.2.1"
+    "async": "^3.2.1",
+    "strftime": "^0.10.0"
   }
 }
