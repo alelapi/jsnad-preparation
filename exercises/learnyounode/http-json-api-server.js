@@ -22,6 +22,7 @@ const server = http.createServer(function (req, res) {
             unixtime: date.getTime()
         }));
     } else {
+        res.writeHead(404)
         res.end('Cannot serve url: ' + path)
     }
 })
