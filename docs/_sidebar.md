@@ -31,3 +31,5 @@
   - [Export](javascript/export/README.md)
   - [Standard built-in objects](javascript/standard-builtin-objects/README.md)
   - [Javascript releases](javascript/releases/README.md)
+  - [Prototypal inheritance](javascript/prototypal-inheritance/README.md)
+
