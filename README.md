@@ -1,3 +1,5 @@
 # jsnad-preparation
 
-HOME - My preparation to JSNAD certification exam
+Some notes about:
+- Node.js (JSNAD certification exam)
+- Javascript
