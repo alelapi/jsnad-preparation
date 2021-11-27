@@ -22,7 +22,7 @@
 - Javascript
   - [for await...of](javascript/for-await-of/README.md)
   - [Iterators and Iteration](javascript/iterators/README.md)
-  - [Clojures](javascript/clojures/README.md)
+  - [Closures](javascript/closures/README.md)
   - [IIFE](javascript/iife/README.md)
   - [Module Design Pattern](javascript/module-pattern/README.md)
   - [Generator functions](javascript/generators/README.md)
@@ -32,4 +32,5 @@
   - [Standard built-in objects](javascript/standard-builtin-objects/README.md)
   - [Javascript releases](javascript/releases/README.md)
   - [Prototypal inheritance](javascript/prototypal-inheritance/README.md)
-
+- Frontend
+  - [Data normalization](frontend/DATA_NORMALIZATION.md)
