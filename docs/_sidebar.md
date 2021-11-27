@@ -33,4 +33,4 @@
   - [Javascript releases](javascript/releases.md)
   - [Prototypal inheritance](javascript/prototypal-inheritance.md)
 - Frontend
-  - [Data normalization](frontend/data_normalization.md)
+  - [Data normalization](frontend/data-normalization.md)
