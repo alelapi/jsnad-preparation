@@ -34,3 +34,4 @@
   - [Prototypal inheritance](javascript/prototypal-inheritance.md)
 - Frontend
   - [Data normalization](frontend/data-normalization.md)
+  - [Architectures](frontend/architectures.md)
