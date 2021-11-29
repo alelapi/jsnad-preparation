@@ -35,3 +35,4 @@
 - Frontend
   - [Data normalization](frontend/data-normalization.md)
   - [Architectures](frontend/architectures.md)
+  - [Tests](frontend/tests.md)
