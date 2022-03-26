@@ -10,7 +10,11 @@ We can spin a child process using Node’s `child_process` module and those chil
 - control the arguments to be passed to the underlying OS command
 - control that command’s output. (For example, we can pipe the output of one command as the input to another (just like we do in Linux) as all inputs and outputs of these commands can be presented to us using Node streams).
 
+The child_process module allows us to execute external non-Node applications and others (including Node applications) to use with our programs.
 There are four different ways to create a child process in Node: `spawn()`, `fork()`, `exec()`, and `execFile()`.
+All methods are asynchronous. The right method will depend on what you need:
+
+![Choosing right method](08fig01_alt.jpg)
 
 ## spawn()
 
@@ -21,6 +25,14 @@ The result of executing the spawn function is a `ChildProcess` instance, which i
 ```
 const { spawn } = require("child_process");
 const child = spawn("find", [".", "-type", "f"]);
+
+child.stdout.on('data', (data) => {
+  console.log(`stdout: ${data}`);
+});
+
+child.stderr.on('data', (data) => {
+  console.error(`stderr: ${data}`);
+});
 
 child.on("exit", function(code, signal) {
   console.log(
