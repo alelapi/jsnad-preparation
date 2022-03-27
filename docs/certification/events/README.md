@@ -2,7 +2,8 @@
 
 ## The EventEmitter Module
 
-The EventEmitter is a module that facilitates communication between objects in Node. Emitter objects emit named events that cause previously registered listeners to be called.
+The EventEmitter is a Node.js built-in module that facilitates communication between objects in Node. It allows to create, fire, and listen for custom events.
+Emitter objects emit named events that cause previously registered listeners to be called.
 EventEmitter objects emit events and expose an eventEmitter.on() function that allows one or more functions to be attached to named events emitted by the object.
 When the EventEmitter object emits an event, all of the functions attached to that specific event are called synchronously
 
@@ -47,6 +48,16 @@ About to execute
 Done with execute
 After executing
 ```
+
+### Some common properties and methods of the events module
+
+| EventEmitter methods |	Description |
+| addListener(event, listener) | Adds a listener to the end of the listeners array for the specified event. No checks are made to see if the listener has already been added. |
+| on(event, listener) |	It can also be called as an alias of emitter.addListener() |
+| once(event, listener) |	Adds a one-time listener for the event. This listener is invoked only the next time the event is fired, after which it is removed. |
+| emit(event, [arg1], [arg2], [...]) | Raise the specified events with the supplied arguments. |
+| removeListener(event, listener) | Removes a listener from the listener array for the specified event. Caution: changes array indices in the listener array behind the listener. |
+| removeAllListeners([event]) | Removes all listeners, or those of the specified event. |
 
 ### EventEmitter and asynchronous events
 
