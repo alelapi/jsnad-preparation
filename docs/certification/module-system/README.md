@@ -98,9 +98,8 @@ To see all your config:
 ## Using ECMAScript modules
 
 ECMAScript is the language specification created to standardize JavaScript.
-ECMAScript modules are official format to package JavaScript code for reuse.
-Node.Js support them and provide a limited interoperability with CommonJs format, the original and default mode for Node.Js, but they are still currently experimental.
-Support is enabled from version `13.2.0`.
+The CommonJS module specification is the standard used in Node.js for working with modules.
+Client-side JavaScript that runs in the browser uses another standard, called ES Modules. Node.Js support them and provide a limited interoperability with CommonJs format, the original and default mode for Node.Js.
 
 ```
 import express from "express";
@@ -129,3 +128,19 @@ You can use ECMAScript/CommonJs module globally with extension .js setting in pa
 ```
 
 `export` syntax can be used to export object, functions, and values.
+
+### How require works
+
+The module loading mechanism in Node.js is caching the modules on the first require call. It means that every time you use require a module you will get the same instance of module, which ensures that the modules are singleton-like and have the same state across your application.
+You can load native modules and path references from your file system or installed modules. 
+If the identifier passed to the require function is not a native module or a file reference (beginning with /, ../, ./ or similar), then Node.js will look for installed modules in the `node_modules` folder. It starts from the parent directory of your current module and then moves to the parent directory until it finds the right module or until the root of the file system is reached.
+
+The module dealing with module loading in the Node core is called `module.js`, and can be found in `lib/module.js` in the Node.js repository.
+The most important functions to check here are the `_load` and `_compile` functions.
+
+- Module._load
+This function checks whether the module is in the cache already – if so, it returns the exports object. If the module is native, it calls the `NativeModule.require()` with the filename and returns the result.
+Otherwise, it creates a new module for the file and saves it to the cache. Then it loads the file contents before returning its exports object.
+
+- Module._compile
+The compile function runs the file contents in the correct scope or sandbox, as well as exposes helper variables like `require`, `module` or `exports` to the file.
