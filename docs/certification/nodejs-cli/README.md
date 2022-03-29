@@ -12,25 +12,25 @@ Node.js comes with a variety of CLI options. These options expose built-in debug
 
 Some of options available:
 
-`--enable-source-maps` = Enable Source Map v3 support for stack traces.
-`--icu-data-dir=file` = Specify ICU data load path. (Overrides NODE_ICU_DATA.)
+- `--enable-source-maps` = Enable Source Map v3 support for stack traces.
+- `--icu-data-dir=file` = Specify ICU data load path. (Overrides NODE_ICU_DATA.)
 
 ICU (International Components for Unicode) = Libraries providing Unicode and Globalization support for software applications. Some services provided:
 
-- Code Page Conversion: Convert text data to or from Unicode and nearly any other character set or encoding.
-- Collation: Compare strings according to the conventions and standards of a particular language, region or country.
-- Formatting: Format numbers, dates, times and currency amounts according the conventions of a chosen locale.
-- Time Calculations: Multiple types of calendars are provided beyond the traditional Gregorian calendar.
+  - Code Page Conversion: Convert text data to or from Unicode and nearly any other character set or encoding.
+  - Collation: Compare strings according to the conventions and standards of a particular language, region or country.
+  - Formatting: Format numbers, dates, times and currency amounts according the conventions of a chosen locale.
+  - Time Calculations: Multiple types of calendars are provided beyond the traditional Gregorian calendar.
   (see more at http://site.icu-project.org/)
 
-`--input-type=type` = (type = commonjs/module) Configures Node.js to interpret string input as CommonJS or as an ES module
-`--inspect[=[host:]port]` = Activate inspector on `host:port`. Default is 127.0.0.1:9229.
-`--max-http-header-size=size` = Specify the maximum size, in bytes, of HTTP headers. Defaults to 16 KB.
-`--no-deprecation` = Silence deprecation warnings.
-`--no-force-async-hooks-checks` = Disables runtime checks for async_hooks. These will still be enabled dynamically when async_hooks is enabled.
-`--no-warnings` = Silence all process warnings (including deprecations).
-`--node-memory-debug` = Enable extra debug checks for memory leaks in Node.js internals. This is usually only useful for developers debugging Node.js itself.
-`--preserve-symlinks` = Instructs the module loader to preserve symbolic links when resolving and caching modules.
+- `--input-type=type` = (type = commonjs/module) Configures Node.js to interpret string input as CommonJS or as an ES module
+- `--inspect[=[host:]port]` = Activate inspector on `host:port`. Default is 127.0.0.1:9229.
+- `--max-http-header-size=size` = Specify the maximum size, in bytes, of HTTP headers. Defaults to 16 KB.
+- `--no-deprecation` = Silence deprecation warnings.
+- `--no-force-async-hooks-checks` = Disables runtime checks for async_hooks. These will still be enabled dynamically when async_hooks is enabled.
+- `--no-warnings` = Silence all process warnings (including deprecations).
+- `--node-memory-debug` = Enable extra debug checks for memory leaks in Node.js internals. This is usually only useful for developers debugging Node.js itself.
+- `--preserve-symlinks` = Instructs the module loader to preserve symbolic links when resolving and caching modules.
 
 By default, when Node.js loads a module from a path that is symbolically linked to a different on-disk location, Node.js will dereference the link and use the actual on-disk "real path" of the module as both an identifier and as a root path to locate other dependency modules. In most cases, this default behavior is acceptable. However, when using symbolically linked peer dependencies the default behavior causes an exception to be thrown if moduleA attempts to require moduleB as a peer dependency.
 
