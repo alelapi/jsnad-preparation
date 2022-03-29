@@ -1,5 +1,7 @@
 # Error Handling
 
+Errors in Node.js are handled through exceptions.
+
 An exception is created using `throw` an Error object.
 You can technically throw things that are not Errors, but this should be avoided.
 
@@ -13,6 +15,9 @@ class MyError extends Error {
 }
 throw new MyError();
 ```
+
+An exception handler is a `try`/`catch` statement.
+Any exception raised in the lines of code included in the try block is handled in the corresponding catch block.
 
 Synchronous API will use `throw` to report errors.
 Errors that occur within Asynchronous APIs may be reported in multiple ways:
